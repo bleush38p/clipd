@@ -19,7 +19,9 @@
     "always-on-top": true,
     "visible-on-all-workspaces": true,
     "show_in_taskbar": false,
-    "transparent": true
+    "transparent": true,
+    "min_width": 450,
+    "min_height": 300
   },
   "single-instance": true
 }
