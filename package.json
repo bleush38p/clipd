@@ -1,0 +1,25 @@
+{
+  "name": "clipd",
+  "version": "0.0.0",
+  "description": "A better clipboard helper: quickly save, browse, and share clips. (nwjs)",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "bleush38p",
+  "license": "MIT",
+  "dependencies": {
+    "highlight.js": "^8.6.0"
+  },
+  "window": {
+    "title": "clipd",
+    "show": false,
+    "toolbar": false,
+    "frame": false,
+    "always-on-top": true,
+    "visible-on-all-workspaces": true,
+    "show_in_taskbar": false,
+    "transparent": true
+  },
+  "single-instance": true
+}
