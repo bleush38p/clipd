@@ -88,8 +88,10 @@ function closeWelcomeWindow() {
   }
 }
 
+// windowShowing = false /*
+/*/ win.hide /*/
 windowShowing = true
 win.show()
-win.focus()
+win.focus() /**/
 
 if (!localStorage.firstRun) openWelcomeWindow()

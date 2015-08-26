@@ -114,7 +114,6 @@ section {
 }
 .clipboard-list li {
   display: block;
-  height: 80px;
   overflow: hidden;
   padding: 0.5em;
   margin: 0.5em 0;
@@ -140,6 +139,7 @@ section {
   margin: 0;
   font-family: 'Monaco', monospace;
   opacity: 0.8;
-  height: 44px;
+  line-height: 1.25;
+  max-height: 3.75em;
   overflow: hidden;
 }

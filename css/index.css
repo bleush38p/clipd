@@ -19,8 +19,15 @@ body {
 body:hover {
   background-color: rgba(63, 63, 63, 0.95);
 }
+
+body.solid {
+  background-color: rgb(63, 63, 63);
+}
+
+/* TITLE BAR */
 .title {
   position: absolute;
+  z-index: 10;
   -webkit-app-region: drag;
   -webkit-user-select: none;
   width: 100%;
@@ -46,14 +53,26 @@ h1 {
   padding: 1px;
   border-radius: 100%;
   top: 0;
-  left: 0;
   z-index: 2;
   -webkit-app-region: no-drag;
+  transition: transform 0.5s ease;
 }
-.title .button:hover {
+.title .button.left {
+  left: 0;
+}
+.title .button.right {
+  right: 0;
+}
+#settingsButton:hover {
+  background: #0277BD;
+}
+.settings #settingsButton {
+  transform: rotate(180deg);
+}
+#closeButton:hover {
   background: #B71C1C;
 }
-.title .button:after {
+#closeButton:after {
   content: 'Click to hide or hold down to fully quit clipd';
   color: rgba(255, 255, 255, 0.75);
   font-size: 0.6em;
@@ -66,10 +85,10 @@ h1 {
   transform: translateY(20px);
   pointer-events: none;
 }
-.title .button.down:after {
+#closeButton.down:after {
   content: 'Keep holding to quit or drag away to cancel';
 }
-.title .button:hover:after {
+#closeButton:hover:after {
   transform: none;
 }
 @media (max-width: 500px) {
@@ -77,7 +96,7 @@ h1 {
     opacity: 0;
   }
 }
-.title .button:before {
+#closeButton:before {
   content: '';
   background-color: #B71C1C;
   width: 100%;
@@ -90,46 +109,46 @@ h1 {
   transform: scale(0);
   transition: none;
 }
-.title .button.down:before {
+#closeButton.down:before {
   transition: 1s cubic-bezier(0.25, 0, 1, 1);
   transform: scale(25); /* 25 * 8 = 200 */
 }
 @media (min-width: 200px) {
-  .title .button.down:before {
+  #closeButton.down:before {
     transform: scale(50); /* 50 * 8 = 400 */
   }
 }
 @media (min-width: 400px) {
-  .title .button.down:before {
-    transition: 1s cubic-bezier(0.5, 0, 1, 1);
+  #closeButton.down:before {
+    transition-timing-function: cubic-bezier(0.5, 0, 1, 1);
     transform: scale(75); /* 75 * 8 = 600 */
   }
 }
 @media (min-width: 600px) {
-  .title .button.down:before {
+  #closeButton.down:before {
     transform: scale(100); /* 100 * 8 = 800 */
   }
 }
 @media (min-width: 800px) {
-  .title .button.down:before {
-    transition: 1s cubic-bezier(0.75, 0, 1, 0.75);
+  #closeButton.down:before {
+    transition-timing-function: cubic-bezier(0.75, 0, 1, 0.75);
     transform: scale(125); /* 125 * 8 = 1000 */
   }
 }
 @media (min-width: 1000px) {
-  .title .button.down:before {
+  #closeButton.down:before {
     transform: scale(175); /* 125 * 8 = 1400 */
   }
 }
 @media (min-width: 1400px) {
-  .title .button.down:before {
-    transition: 1s cubic-bezier(0.8, 0, 1, 0.5);
+  #closeButton.down:before {
+    transition-timing-function: cubic-bezier(0.8, 0, 1, 0.5);
     transform: scale(225); /* 225 * 8 = 1800 */
   }
 }
 @media (min-width: 1600px) {
-  .title .button.down:before {
-    transition: 1s cubic-bezier(0.8, 0, 1, 0.2);
+  #closeButton.down:before {
+    transition-timing-function: cubic-bezier(0.8, 0, 1, 0.2);
     transform: scale(300); /* 300 * 8 = 2400 */
                            /* your screen had BETTER NOT be any bigger */
   }
@@ -151,11 +170,14 @@ h1 {
   top: 1.5em;
   opacity: 0.65;
   color: white;
+  transition: opacity 0.25s ease;
 }
 body:hover .content {
   opacity: 0.9;
 }
-
+body.solid .content {
+  opacity: 1;
+}
 .listarea {
   position: absolute;
   width: calc(50% - 2em);
@@ -164,6 +186,10 @@ body:hover .content {
   left: 0;
   border-right: 1px solid rgba(255, 255, 255, .23);
   padding: 0 1em;
+}
+.solid .listarea {
+  height: calc(100% - 1.25em);
+  top: 0.25em;
 }
 
 .listarea ul {
@@ -184,7 +210,94 @@ body:hover .content {
   font-size: 1.5em;
   font-weight: 200;
   color: rgba(255, 255, 255, .23);
+  -webkit-user-select: none;
 }
-.listarea li + .empty-message {
+.listarea a {
+  text-decoration: none;
+}
+.listarea a + .empty-message {
   display: none;
+}
+.listarea li {
+  display: block;
+  color: white;
+  padding: 0.5em;
+}
+
+.description {
+  font-size: 0.6em;
+  opacity: 0.7;
+}
+.description, .switcher {
+  font-style: italic;
+  text-transform: uppercase;
+}
+.switcher {
+  border: none;
+  background: none;
+  color: white;
+  font-family: 'Open Sans';
+  font-size: 1em;
+  padding: 2px;
+  margin: -2px;
+  border-radius: 2px;
+  text-decoration: underline;
+  transition: box-shadow 0.25s ease;
+  cursor: pointer;
+}
+.switcher:hover, .switcher:focus {
+  box-shadow: 0 0 2px rgba(0,0,0,1);
+  outline: none;
+}
+.switcher:active {
+  transition-duration: 0.1s;
+  box-shadow: 0 0 5px rgba(0,0,0,1);
+  outline: none;
+}
+[data-mode] {
+  display: none;
+}
+[data-activemode="bytes"] [data-mode="bytes"] {
+  display: inline;
+}
+[data-activemode="words"] [data-mode="words"] {
+  display: inline;
+}
+[data-activemode="lines"] [data-mode="lines"] {
+  display: inline;
+}
+
+li h2 {
+  font-weight: 400;
+  font-size: 1em;
+  margin: 0.2em 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+li pre {
+  font-size: 0.75em;
+  white-space: pre-wrap;
+  margin: 0;
+  font-family: 'Monaco', monospace;
+  opacity: 0.8;
+  line-height: 1.25;
+  max-height: 3.75em;
+  overflow: hidden;
+}
+
+/* SETTINGS */
+.settingsPanel {
+  position: absolute;
+  width: 100%;
+  height: calc(100% - 1.5em);
+  left: 0;
+  top: 1.5em;
+  background-color: #3f3f3f;
+  color: white;
+  transform: translateY(-100%);
+  transition: 0.5s transform ease;
+}
+.settings .settingsPanel {
+  transform: none;
 }

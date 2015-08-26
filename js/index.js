@@ -19,7 +19,10 @@ $closeButton.addEventListener('mouseup', function(e) {
   clearTimeout($closeButton.getAttribute('data-timeout'))
   // hide the window if it hasn't been too long
   if (Date.now() - $closeButton.getAttribute('data-time') < 250) {
-    win.close()
+    if (document.body.classList.contains('settings'))
+      closeAndSaveSettings()
+    else
+      win.close()
   }
 })
 $closeButton.addEventListener('mouseleave', function(e) {
@@ -27,3 +30,31 @@ $closeButton.addEventListener('mouseleave', function(e) {
   clearTimeout($closeButton.getAttribute('data-timeout'))
   // don't do anything, no matter how long it's been
 })
+
+var $settingsButton = document.getElementById('settingsButton')
+$settingsButton.addEventListener('click', function() {
+  if (document.body.classList.contains('settings'))
+    closeAndSaveSettings()
+  else
+    document.body.classList.add('settings')
+})
+win.on('close', closeAndSaveSettings)
+function closeAndSaveSettings() {
+  // saving and stuff, etc.
+  document.body.classList.remove('settings')
+}
+
+function nextMode() {
+  var $content = document.querySelector('.content')
+  var mode = $content.getAttribute('data-activemode')
+  switch (mode) {
+    case 'bytes':
+      $content.setAttribute('data-activemode', 'words')
+      break
+    case 'words':
+      $content.setAttribute('data-activemode', 'lines')
+      break
+    case 'lines':
+      $content.setAttribute('data-activemode', 'bytes')
+  }
+}
