@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="css/index.css">
   <script src="js/init.js"></script>
 </head>
-<body>
+<body class="opaque">
   <div class="title">
     <div class="button left" id="closeButton">
       <i class="material-icons">close</i>
@@ -18,7 +18,7 @@
   <div class="content" data-activemode="bytes">
     <div class="listarea">
     <ul>
-      <a href="#" id="cilp-1953"><li>
+      <a href="#" id="clip-1953"><li>
         <div class="description">
           on clipboard now &bull;
           <button class="switcher" onclick="nextMode()">
@@ -28,6 +28,11 @@
         </div>
         <h2>Set a custom title, or use the first line by default.</h2>
         <pre>Welcome to clipd! &#x23CE; Clipd keeps a history of what's been on your clipboard.</pre>
+        <div class="controls">
+          <button data-icon="pin"></button>
+          <button data-icon="copy"></button>
+          <button data-icon="delete"></button>
+        </div>
       </li></a>
       <a href="#" id="clip-3987"><li>
         <div class="description">
@@ -39,6 +44,11 @@
         </div>
         <h2>.switcher:active {</h2>
         <pre>.switcher:active { &#x23CE;   transition-duration: 0.1s; &#x23CE;   box-shadow: 0 0 5px rgba(0,0,0,1); &#x23CE;   outline: none; &#x23CE; }</pre>
+        <div class="controls">
+          <button data-icon="pin"></button>
+          <button data-icon="copy"></button>
+          <button data-icon="delete"></button>
+        </div>
       </li></a>
       <div class="empty-message">
         There's nothing here!

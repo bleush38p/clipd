@@ -54,11 +54,10 @@ tray.on('click', function() {
   if (windowShowing) {
     win.close()
   } else {
+    closeWelcomeWindow()
     windowShowing = true
     win.show()
     win.focus()
-    localStorage.firstRun = 'complete'
-    closeWelcomeWindow()
   }
 })
 
@@ -85,6 +84,12 @@ function openWelcomeWindow() {
 function closeWelcomeWindow() {
   if (welcomeWindow) {
     welcomeWindow.close(true)
+    localStorage.firstRun = 'complete'
+    localStorage.backgroundDelay = 15
+    localStorage.foregroundDelay = 2
+    localStorage.alwaysOpaque = false
+    localStorage.hoverEffect = true
+    welcomeWindow = null
   }
 }
 

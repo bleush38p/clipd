@@ -16,11 +16,11 @@ body {
   font-family: 'Open Sans';
   transition: background-color 0.25s ease;
 }
-body:hover {
+body:hover, body.noHoverEffect {
   background-color: rgba(63, 63, 63, 0.95);
 }
 
-body.solid {
+body.opaque {
   background-color: rgb(63, 63, 63);
 }
 
@@ -172,10 +172,10 @@ h1 {
   color: white;
   transition: opacity 0.25s ease;
 }
-body:hover .content {
+body:hover .content, body.noHoverEffect .content {
   opacity: 0.9;
 }
-body.solid .content {
+body.opaque .content {
   opacity: 1;
 }
 .listarea {
@@ -187,7 +187,7 @@ body.solid .content {
   border-right: 1px solid rgba(255, 255, 255, .23);
   padding: 0 1em;
 }
-.solid .listarea {
+.opaque .listarea {
   height: calc(100% - 1.25em);
   top: 0.25em;
 }
@@ -222,6 +222,7 @@ body.solid .content {
   display: block;
   color: white;
   padding: 0.5em;
+  position: relative;
 }
 
 .description {
@@ -284,6 +285,45 @@ li pre {
   line-height: 1.25;
   max-height: 3.75em;
   overflow: hidden;
+}
+
+li .controls {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.controls button {
+  border: 0;
+  margin: 0;
+  display: inline-block;
+  background: none;
+  float: right;
+  opacity: 0;
+  width: 24px;
+  height: 24px;
+  background-image: url(../img/sprites-24.png);
+  transform: scale(0.667);
+  transition: 0.15s ease;
+  cursor: pointer;
+}
+li:hover .controls button, a:focus > li .controls button {
+  opacity: 0.25;
+}
+li.pin .controls button[data-icon="pin"] {
+  opacity: 1;
+}
+button[data-icon="pin"] {
+  background-position: -24px -24px;
+}
+button[data-icon="copy"] {
+  background-position: -24px 0;
+}
+button[data-icon="delete"] {
+  background-position: 0 -24px;
+}
+li .controls button[data-icon]:hover, li .controls button[data-icon]:focus {
+  opacity: 0.75;
+  outline: none;
 }
 
 /* SETTINGS */

@@ -9,7 +9,7 @@
   "author": "bleush38p",
   "license": "MIT",
   "dependencies": {
-    "highlight.js": "^8.6.0"
+    "highlight.js": "^8.7.0"
   },
   "window": {
     "title": "clipd",
