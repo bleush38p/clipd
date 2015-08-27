@@ -21,6 +21,7 @@ appmenu.append(new gui.MenuItem({
   key: 'q',
   modifiers: 'cmd',
   click: function () {
+    win.close()
     win.close(true)
     closeWelcomeWindow()
   }
@@ -61,6 +62,27 @@ tray.on('click', function() {
   }
 })
 
+global.mouse = {}
+window.addEventListener('mousemove', function(e) {
+  global.mouse.x = e.screenX
+  global.mouse.y = e.screenY
+})
+
+global.didCopy = function() {
+  return gui.Window.open('copied.html', {
+    title: '',
+    frame: false,
+    toolbar: false,
+    width: 200,
+    height: 20,
+    transparent: true,
+    resizable: false,
+    show: false,
+    "always-on-top": true
+  })
+}
+
+
 var welcomeWindow
 function openWelcomeWindow() {
   welcomeWindow = gui.Window.open('welcome.html', {
@@ -89,14 +111,20 @@ function closeWelcomeWindow() {
     localStorage.foregroundDelay = 2
     localStorage.alwaysOpaque = false
     localStorage.hoverEffect = true
+    localStorage.languages = JSON.stringify(['apache', 'bash', 'coffeescript', 'cpp', 'cs', 'css', 'diff', 'http', 'ini', 'java', 'javascript', 'json', 'makefile', 'markdown', 'nginx', 'obj-c', 'perl', 'php', 'python', 'ruby', 'sql', 'xml'])
+    localStorage.requiredRelevance = 8
+    localStorage.trimClips = true
+    localStorage.noWhitespace = true
     welcomeWindow = null
   }
 }
 
-// windowShowing = false /*
+windowShowing = false /*
 /*/ win.hide /*/
 windowShowing = true
 win.show()
 win.focus() /**/
 
-if (!localStorage.firstRun) openWelcomeWindow()
+if (!localStorage.firstRun) {
+  openWelcomeWindow()
+}

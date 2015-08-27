@@ -202,6 +202,7 @@ body.opaque .content {
   border: 1px solid transparent;
   background: rgba(0,0,0,0.05);
   box-shadow: 0 0 16px -3px rgba(0,0,0,0.2) inset;
+  overflow: auto;
 }
 
 .listarea .empty-message {
@@ -258,6 +259,9 @@ body.opaque .content {
 [data-mode] {
   display: none;
 }
+[data-activemode="chars"] [data-mode="chars"] {
+  display: inline;
+}
 [data-activemode="bytes"] [data-mode="bytes"] {
   display: inline;
 }
@@ -279,6 +283,7 @@ li h2 {
 li pre {
   font-size: 0.75em;
   white-space: pre-wrap;
+  overflow-wrap: break-word;
   margin: 0;
   font-family: 'Monaco', monospace;
   opacity: 0.8;
@@ -309,8 +314,11 @@ li .controls {
 li:hover .controls button, a:focus > li .controls button {
   opacity: 0.25;
 }
-li.pin .controls button[data-icon="pin"] {
+li.pinned .controls button[data-icon="pin"] {
   opacity: 1;
+}
+li.pinned .controls button[data-icon="pin"]:hover, li.pinned .controls button[data-icon="pin"]:focus {
+  opacity: 0.75;
 }
 button[data-icon="pin"] {
   background-position: -24px -24px;
@@ -322,7 +330,7 @@ button[data-icon="delete"] {
   background-position: 0 -24px;
 }
 li .controls button[data-icon]:hover, li .controls button[data-icon]:focus {
-  opacity: 0.75;
+  opacity: 0.5;
   outline: none;
 }
 

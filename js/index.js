@@ -1,3 +1,5 @@
+var clips = []
+
 // primarily for development, but so when the page
 // reloads we don't get two tray icons
 window.addEventListener('beforeunload', function() {
@@ -48,6 +50,9 @@ function nextMode() {
   var $content = document.querySelector('.content')
   var mode = $content.getAttribute('data-activemode')
   switch (mode) {
+    case 'chars':
+      $content.setAttribute('data-activemode', 'bytes')
+      break
     case 'bytes':
       $content.setAttribute('data-activemode', 'words')
       break
@@ -55,6 +60,68 @@ function nextMode() {
       $content.setAttribute('data-activemode', 'lines')
       break
     case 'lines':
-      $content.setAttribute('data-activemode', 'bytes')
+      $content.setAttribute('data-activemode', 'chars')
   }
+}
+
+if (localStorage.firstRun) {
+  start()
+}
+
+function start() {
+  console.log('start!')
+  var pinnedClips = JSON.parse(localStorage.pinnedClips) || []
+  console.log(localStorage.pinnedClips)
+  console.log(pinnedClips)
+  pinnedClips.forEach(function(pinnedClip) {
+    var clip = new Clip(pinnedClip.text, pinnedClip.date, true)
+    clip.language = pinnedClip.language
+    clip.regenerateListItem()
+    clip.rehighlight()
+    clips.push(clip)
+  })
+  console.log(clips)
+
+  clips.forEach(function(clip) {
+    document.querySelector('ul').insertBefore(clip.aNode, document.querySelector('ul').children[0])
+  })
+
+  listener.emitter.on('clip', function(clipText) {
+    var clip = new Clip(clipText)
+    document.querySelector('ul').insertBefore(clip.aNode, document.querySelector('ul').children[0])
+    clips.push(clip)
+  })
+  listener.listen(Number(localStorage.backgroundDelay))
+}
+
+win.on('close', windowClosed)
+function windowClosed() {
+  clips = clips.filter(function(clip) {
+    clip.aNode.remove()
+    return !clip.deleted
+  })
+
+  var pinnedClips = []
+  clips.forEach(function(clip) {
+    if (clip.pinned === true) {
+      pinnedClips.push({
+        text: clip.text,
+        date: clip.momentCreated.format(),
+        language: clip.language
+      })
+    }
+  })
+  localStorage.pinnedClips = JSON.stringify(pinnedClips)
+
+  clips.forEach(function(clip) {
+    document.querySelector('ul').insertBefore(clip.aNode, document.querySelector('ul').children[0])
+  })
+  listener.listen(Number(localStorage.backgroundDelay))
+}
+win.on('focus', windowUpdate)
+function windowUpdate() {
+  clips.forEach(function(clip) {
+    clip.regenerateListItem()
+  })
+  listener.listen(Number(localStorage.foregroundDelay))
 }

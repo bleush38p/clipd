@@ -9,10 +9,11 @@
   "author": "bleush38p",
   "license": "MIT",
   "dependencies": {
-    "highlight.js": "^8.7.0"
+    "highlight.js": "^8.7.0",
+    "moment": "^2.10.6"
   },
   "window": {
-    "title": "clipd",
+    "title": "",
     "show": false,
     "toolbar": false,
     "frame": false,

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" href="css/webfonts/webfonts.css">
+  <style>
+    body {
+      background: transparent;
+      color: rgba(255, 255, 255, 0.8);
+      font-family: 'Open Sans';
+      font-size: 12px;
+      -webkit-user-select: none;
+    }
+    html, body, p {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body style="opacity:1">
+  <p>
+    Copied to clipboard!
+  </p>
+  <script>
+    var TRANSLATE_SPEED = 1
+    var OPACITY_SPEED = 0.05
+
+    var gui = require('nw.gui')
+    var win = gui.Window.get()
+    win.x = global.mouse.x
+    win.y = global.mouse.y - 12
+    win.show()
+
+    function tick() {
+      win.y = win.y - TRANSLATE_SPEED
+      document.body.style.opacity = document.body.style.opacity - OPACITY_SPEED
+      if (document.body.style.opacity < 0 || document.body.style.opacity == 0) {
+        win.close()
+      } else {
+        requestAnimationFrame(tick)
+      }
+    }
+    tick()
+  </script>
+</body>
+</html>
