@@ -512,7 +512,6 @@ hr[data-label]:before {
   outline: none;
   border: 2px solid white;
 }
-
 .settingsPanel .error {
   font-size: 0.8em;
   background-color: #B71C1C;

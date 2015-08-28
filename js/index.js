@@ -1,4 +1,5 @@
 var clips = []
+var oslWindow = null
 
 // primarily for development, but so when the page
 // reloads we don't get two tray icons
@@ -36,13 +37,22 @@ $closeButton.addEventListener('mouseleave', function(e) {
 
 var $settingsButton = document.getElementById('settingsButton')
 $settingsButton.addEventListener('click', function() {
-  if (document.body.classList.contains('settings'))
+  if (document.body.classList.contains('settings')) {
     closeAndSaveSettings()
-  else
+  } else {
     document.body.classList.add('settings')
+    document.getElementById('showsOnLaunch').focus()
+  }
 })
 win.on('close', closeAndSaveSettings)
-
+var resizeST
+win.on('resize', function() {
+  clearTimeout(resizeST)
+  resizeST = setTimeout(function() {
+    win.hide()
+    win.show()
+  }, 500)
+})
 function nextMode() {
   var $content = document.querySelector('.content')
   var mode = $content.getAttribute('data-activemode')
@@ -97,6 +107,8 @@ function start() {
 
 win.on('close', windowClosed)
 function windowClosed() {
+  if (oslWindow) oslWindow.close()
+
   clips = clips.filter(function(clip) {
     clip.aNode.remove()
     return !clip.deleted
@@ -179,6 +191,9 @@ function updateWindowDisplay() {
   document.getElementById('foregroundDelay').value = localStorage.foregroundDelay
   document.getElementById('backgroundDelay').value = localStorage.backgroundDelay
 
+  // reset buttons
+  document.getElementById('clearDefaults').innerHTML = 'Reset all settings to defaults&hellip;'
+  document.getElementById('clearAll').innerHTML = 'Clear all data and quit&hellip;'
 }
 
 // SETTINGS
@@ -240,21 +255,48 @@ function closeAndSaveSettings() {
     updateWindowDisplay()
     document.body.classList.remove('settings')
   } else {
-    $error = document.createElement('div')
-    $error.classList.add('error')
-    $error.innerHTML = 'The following error' + (e.length > 1 ? 's' : '') +
-                       ' occured:<br>' + e.join('<br>')
-    document.querySelector('.settingsPanel').insertBefore(
-      $error,
-      document.querySelector('.settingsPanel').children[0]
-    )
-    $errorClone = $error.cloneNode(true)
-    $errorClone.classList.add('spacer')
-    document.querySelector('.settingsPanel').insertBefore($errorClone, $error)
+    displaySettingsError(e)
   }
 }
-
-document.getElementById('clearAll').addEventListener('click', function() {
-  win.close(true)
-  localStorage.clear()
+document.getElementById('clearDefaults').addEventListener('click', function() {
+  if (this.innerText.indexOf('R') === 0) {
+    this.innerText = 'Are you sure? Click to reset all settings.'
+  } else {
+    setDefaults()
+    updateWindowDisplay()
+    document.querySelector('.settingsPanel').scrollTop = 0
+    displaySettingsError(['All settings reset.'], true)
+  }
 })
+document.getElementById('clearAll').addEventListener('click', function() {
+  if (this.innerText.indexOf('C') === 0) {
+    this.innerHTML = 'Are you sure?<br><br><strong>Click to clear all data, including pinned clips.</strong>'
+  } else {
+    win.close(true)
+    localStorage.clear()
+  }
+})
+function displaySettingsError(e, noPre) {
+  $error = document.createElement('div')
+  $error.classList.add('error')
+  $error.innerHTML = (noPre ? '' : ('The following error' + (e.length > 1 ? 's' : '') +
+                     ' occured:<br>')) + e.join('<br>')
+  document.querySelector('.settingsPanel').insertBefore(
+    $error,
+    document.querySelector('.settingsPanel').children[0]
+  )
+  $errorClone = $error.cloneNode(true)
+  $errorClone.classList.add('spacer')
+  document.querySelector('.settingsPanel').insertBefore($errorClone, $error)
+}
+
+function showOSL() {
+  oslWindow = gui.Window.open('osl.html', {
+    title: 'Open Source Licenses',
+    toolbar: false,
+    position: 'center',
+    width: 580,
+    height: 460,
+    resizable: true
+  })
+}
