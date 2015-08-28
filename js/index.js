@@ -129,7 +129,11 @@ function windowUpdate() {
 }
 
 function updateWindowDisplay() {
-  document.body.classList.remove('opaque', 'noHoverEffect')
+  document.body.classList.remove('opaque', 'noHoverEffect', 'code-wrap', 'code-light')
+  ;(document.querySelector('link[href^="node_modules"]')||{remove:function(){}}).remove()
+  // behavior
+  document.getElementById('showsOnLaunch').checked = (localStorage.showsOnLaunch === 'true')
+  // appearance
   if (localStorage.alwaysOpaque === 'true') {
     document.body.classList.add('opaque')
     document.getElementById('opaque').checked = true
@@ -142,12 +146,36 @@ function updateWindowDisplay() {
   } else {
     document.getElementById('disableHover').checked = false
   }
-  if (localStorage.codeWraps === 'true') {
-    document.body.classList.add('code-wrap')
-  }
-  document.getElementById('showsOnLaunch').checked = (localStorage.showsOnLaunch === 'true')
+  // new clips
   document.getElementById('trimClips').checked = (localStorage.trimClips === 'true')
   document.getElementById('noWhitespace').checked = (localStorage.noWhitespace === 'true')
+  // language detection
+  document.getElementById('primaryLanguages').value = JSON.parse(localStorage.languages).filter(function(lang) {
+    return (lang !== 'text')
+  }).join(', ')
+  document.getElementById('requiredRelevance').value = localStorage.requiredRelevance
+  // syntax highlighting
+  ;([].filter.call(document.querySelectorAll('#codeHighlight option'), function($opt) {
+    return ($opt.innerText === localStorage.codeHighlight)
+  })[0]||{setAttribute:function(){}}).setAttribute('selected', true)
+  var $highlight = document.createElement('link')
+  $highlight.setAttribute('rel', 'stylesheet')
+  $highlight.setAttribute('href', 'node_modules/highlight.js/styles/' +
+                                  localStorage.codeHighlight + '.css')
+  document.querySelector('head').appendChild($highlight)
+  if (localStorage.codeDark === 'false') {
+    document.body.classList.add('code-light')
+    document.getElementById('codeDark').checked = false
+  } else {
+    document.getElementById('codeDark').checked = true
+  }
+  if (localStorage.codeWraps === 'true') {
+    document.body.classList.add('code-wrap')
+    document.getElementById('codeWraps').checked = true
+  } else {
+    document.getElementById('codeWraps').checked = false
+  }
+  // clipboard updates
   document.getElementById('foregroundDelay').value = localStorage.foregroundDelay
   document.getElementById('backgroundDelay').value = localStorage.backgroundDelay
 
@@ -156,16 +184,74 @@ function updateWindowDisplay() {
 // SETTINGS
 
 function closeAndSaveSettings() {
+  var e = [], rr, fd, bd
+  ;[].forEach.call(document.querySelectorAll('.settingsPanel .error'), function($elem) {
+    $elem.remove()
+  })
   localStorage.showsOnLaunch = document.getElementById('showsOnLaunch').checked
   localStorage.alwaysOpaque = document.getElementById('opaque').checked
   localStorage.hoverEffect = !document.getElementById('disableHover').checked
   localStorage.trimClips = document.getElementById('trimClips').checked
   localStorage.noWhitespace = document.getElementById('noWhitespace').checked
-  localStorage.foregroundDelay = document.getElementById('foregroundDelay').value
-  localStorage.backgroundDelay = document.getElementById('backgroundDelay').value
-  // saving and stuff, etc.
-  updateWindowDisplay()
-  document.body.classList.remove('settings')
+  var selectedLangs = ['text'], wasError = false
+  document.getElementById('primaryLanguages').value
+    .split(',')
+    .map(function(s){return s.trim()})
+    .map(function(s){return s.toLowerCase()})
+    .filter(Boolean) // remove any empty strings
+    .forEach(function(text) {
+      if (~LANGUAGES.indexOf(text)) {
+        selectedLangs.push(text)
+      } else {
+        e.push('"' + text + '" is not a recognized language.')
+        wasError = true
+      }
+    })
+  if (wasError) {
+    document.getElementById('primaryLanguages').value = selectedLangs.filter(function(lang) {
+      return (lang !== 'text')
+    }).join(', ')
+  } else {
+    localStorage.languages = JSON.stringify(selectedLangs)
+  }
+  var rr = parseInt(document.getElementById('requiredRelevance').value)
+  if (rr >= -1 && rr <= 255) {
+    localStorage.requiredRelevance = rr
+  } else {
+    e.push('Required relevance must be a number between -1 and 255.')
+  }
+  localStorage.codeHighlight = document.getElementById('codeHighlight').value
+  localStorage.codeDark = document.getElementById('codeDark').checked
+  localStorage.codeWraps = document.getElementById('codeWraps').checked
+  var fd = parseInt(document.getElementById('foregroundDelay').value)
+    if (fd >= 1 && fd <= 360) {
+    localStorage.foregroundDelay = fd
+  } else {
+    e.push('Foreground delay must be a number between 1 and 360.')
+  }
+  var bd = parseInt(document.getElementById('backgroundDelay').value)
+    if (bd >= 1 && bd <= 360) {
+    localStorage.backgroundDelay = bd
+  } else {
+    e.push('Background delay must be a number between 1 and 360.')
+  }
+  if (e.length === 0) {
+    // saving and stuff, etc.
+    updateWindowDisplay()
+    document.body.classList.remove('settings')
+  } else {
+    $error = document.createElement('div')
+    $error.classList.add('error')
+    $error.innerHTML = 'The following error' + (e.length > 1 ? 's' : '') +
+                       ' occured:<br>' + e.join('<br>')
+    document.querySelector('.settingsPanel').insertBefore(
+      $error,
+      document.querySelector('.settingsPanel').children[0]
+    )
+    $errorClone = $error.cloneNode(true)
+    $errorClone.classList.add('spacer')
+    document.querySelector('.settingsPanel').insertBefore($errorClone, $error)
+  }
 }
 
 document.getElementById('clearAll').addEventListener('click', function() {

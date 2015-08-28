@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <title></title>
   <link rel="stylesheet" href="css/webfonts/webfonts.css">
-  <link rel="stylesheet" href="node_modules/highlight.js/styles/monokai_sublime.css">
   <link rel="stylesheet" href="css/index.css">
   <script src="js/langs.js"></script>
   <script src="js/listen.js"></script>
@@ -66,7 +66,9 @@
 
     <hr data-label="syntax highlighting">
 
-    <select id="codeHighlight"></select>
+    <select id="codeHighlight">
+      <option>agate</option><option>androidstudio</option><option>arta</option><option>ascetic</option><option>atelier-cave.dark</option><option>atelier-cave.light</option><option>atelier-dune.dark</option><option>atelier-dune.light</option><option>atelier-estuary.dark</option><option>atelier-estuary.light</option><option>atelier-forest.dark</option><option>atelier-forest.light</option><option>atelier-heath.dark</option><option>atelier-heath.light</option><option>atelier-lakeside.dark</option><option>atelier-lakeside.light</option><option>atelier-plateau.dark</option><option>atelier-plateau.light</option><option>atelier-savanna.dark</option><option>atelier-savanna.light</option><option>atelier-seaside.dark</option><option>atelier-seaside.light</option><option>atelier-sulphurpool.dark</option><option>atelier-sulphurpool.light</option><option>codepen-embed</option><option>color-brewer</option><option>dark</option><option>darkula</option><option>default</option><option>docco</option><option>far</option><option>foundation</option><option>github-gist</option><option>github</option><option>googlecode</option><option>grayscale</option><option>hopscotch</option><option>hybrid</option><option>idea</option><option>ir_black</option><option>kimbie.dark</option><option>kimbie.light</option><option>magula</option><option>mono-blue</option><option>monokai_sublime</option><option>monokai</option><option>obsidian</option><option>paraiso.dark</option><option>paraiso.light</option><option>pojoaque</option><option>railscasts</option><option>rainbow</option><option>solarized_dark</option><option>solarized_light</option><option>sunburst</option><option>tomorrow-night-blue</option><option>tomorrow-night-bright</option><option>tomorrow-night-eighties</option><option>tomorrow-night</option><option>tomorrow</option><option>vs</option><option>xcode</option><option>zenburn</option>
+    </select>
     <label for="codeHighlight">Color scheme</label>
 
     <input type="checkbox" id="codeDark">
@@ -87,7 +89,7 @@
 
     <hr data-label="danger zone">
 
-    <button id="clearDefaults" class="danger">Reset all settings to defaults&hellip;</button>
+    <button id="clearDefaults" class="danger" onclick="setDefaults();updateWindowDisplay()">Reset all settings to defaults&hellip;</button>
     <button id="clearAll" class="danger">Clear all data and quit&hellip;</button>
 
     <hr data-label="info">

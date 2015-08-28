@@ -105,6 +105,7 @@ function openWelcomeWindow() {
 }
 function closeWelcomeWindow() {
   if (welcomeWindow) {
+    setDefaults()
     welcomeWindow.close(true)
     welcomeWindow = null
     if (start) start()

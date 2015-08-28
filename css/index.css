@@ -85,6 +85,9 @@ h1 {
   transform: translateY(20px);
   pointer-events: none;
 }
+.settings #closeButton:after {
+  content: 'Click to close settings';
+}
 #closeButton.down:after {
   content: 'Keep holding to quit or drag away to cancel';
 }
@@ -361,9 +364,9 @@ li .controls button[data-icon]:hover, li .controls button[data-icon]:focus {
 .details .description {
   white-space: nowrap;
 }
+/* comment */
 .details pre {
   border-radius: 4px;
-  border: 1px solid transparent;
   background: rgba(0,0,0,0.05);
   box-shadow: 0 0 16px -3px rgba(0,0,0,0.2) inset;
   max-height: calc(100% - 4.92em);
@@ -372,9 +375,21 @@ li .controls button[data-icon]:hover, li .controls button[data-icon]:focus {
   overflow: auto;
   margin: 0.5em 0;
   white-space: pre;
+  font-family: 'Monaco';
+  line-height: 1.15;
+}
+.code-light .details pre {
+  background: rgba(255, 255, 255, 0.95);
+  color: black;
+  box-shadow: 0 0 6px -3px rgba(0, 0, 0, 0.56) inset;
 }
 .code-wrap .details pre {
   white-space: pre-wrap;
+  word-break: break-word;
+}
+.details code {
+  font-family: inherit;
+  font-size: 0.75em;
 }
 
 /* SETTINGS */
@@ -442,7 +457,7 @@ li .controls button[data-icon]:hover, li .controls button[data-icon]:focus {
 .settingsPanel input[type="number"] {
   width: 3em;
 }
-.settingsPanel input[type="text"], {
+.settingsPanel input[type="text"] {
   width: 15em;
 }
 .settingsPanel select {
@@ -496,4 +511,19 @@ hr[data-label]:before {
 .settingsPanel button:focus {
   outline: none;
   border: 2px solid white;
+}
+
+.settingsPanel .error {
+  font-size: 0.8em;
+  background-color: #B71C1C;
+  border-radius: 2px;
+  padding: 6px;
+  position: fixed;
+  width: 388px;
+  z-index: 10;
+  top: 24px;
+}
+.settingsPanel .error.spacer {
+  position: static;
+  opacity: 0;
 }

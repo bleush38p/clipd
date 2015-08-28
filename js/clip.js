@@ -34,7 +34,7 @@
     this.text = text
     this.displayText = text.split('\n').join(' ⏎ ')
     highlighted = hljs.highlightAuto(text, JSON.parse(localStorage.languages))
-    if (highlighted.relevance >= Number(localStorage.requiredRelevance)) {
+    if (localStorage.requiredRelevance > -1 && highlighted.relevance >= Number(localStorage.requiredRelevance)) {
       this.language = highlighted.language
       this.highlightedHTML = highlighted.value
     } else {
