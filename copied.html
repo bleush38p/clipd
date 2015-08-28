@@ -32,6 +32,11 @@
     win.y = global.mouse.y - 12
     win.show()
 
+    if (global.copyText) {
+      document.querySelector('p').innerText = global.copyText
+      global.copyText = undefined
+    }
+
     function tick() {
       win.y = win.y - TRANSLATE_SPEED
       document.body.style.opacity = document.body.style.opacity - OPACITY_SPEED

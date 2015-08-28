@@ -20,7 +20,6 @@ function create(desc, publ, gists, callback) {
       })
       res.on('end', function() {
         var body = Buffer.concat(chunks)
-        console.log('ended!')
         callback(body.toString())
       })
     })

@@ -238,7 +238,7 @@ body.opaque .content {
   font-size: 0.6em;
   opacity: 0.7;
 }
-.description, .switcher {
+.description .switcher {
   font-style: italic;
   text-transform: uppercase;
 }
@@ -369,7 +369,7 @@ li .controls button[data-icon]:hover, li .controls button[data-icon]:focus {
   border-radius: 4px;
   background: rgba(0,0,0,0.05);
   box-shadow: 0 0 16px -3px rgba(0,0,0,0.2) inset;
-  max-height: calc(100% - 4.92em);
+  max-height: calc(100% - 5.15em);
   padding: 4px;
   box-sizing: border-box;
   overflow: auto;
@@ -386,6 +386,10 @@ li .controls button[data-icon]:hover, li .controls button[data-icon]:focus {
 .code-wrap .details pre {
   white-space: pre-wrap;
   word-break: break-word;
+}
+.share {
+  font-size: 0.75em;
+  opacity: 0.9;
 }
 .details code {
   font-family: inherit;

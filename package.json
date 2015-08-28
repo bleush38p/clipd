@@ -1,6 +1,6 @@
 {
   "name": "clipd",
-  "version": "0.0.0",
+  "version": "0.1-pre.0",
   "description": "A better clipboard helper: quickly save, browse, and share clips. (nwjs)",
   "main": "index.html",
   "scripts": {

@@ -68,7 +68,8 @@ window.addEventListener('mousemove', function(e) {
   global.mouse.y = e.screenY
 })
 
-global.didCopy = function() {
+global.didCopy = function(text) {
+  global.copyText = text
   return gui.Window.open('copied.html', {
     title: '',
     frame: false,
@@ -113,18 +114,18 @@ function closeWelcomeWindow() {
 }
 function setDefaults() {
   localStorage.firstRun = 'complete'
-  localStorage.backgroundDelay = 15 // x
-  localStorage.foregroundDelay = 2 // x
-  localStorage.alwaysOpaque = false // x
-  localStorage.hoverEffect = true // x
+  localStorage.backgroundDelay = 15
+  localStorage.foregroundDelay = 2
+  localStorage.alwaysOpaque = false
+  localStorage.hoverEffect = true
   localStorage.languages = JSON.stringify(['text', 'apache', 'bash', 'coffeescript', 'cpp', 'cs', 'css', 'diff', 'http', 'ini', 'java', 'javascript', 'json', 'makefile', 'markdown', 'nginx', 'objectivec', 'perl', 'php', 'python', 'ruby', 'sql', 'xml'])
   localStorage.requiredRelevance = 8
   localStorage.codeHighlight = 'monokai_sublime'
   localStorage.codeBackground = 'dark'
-  localStorage.codeWraps = true
-  localStorage.trimClips = true // x
-  localStorage.noWhitespace = true // x
-  localStorage.showsOnLaunch = true // x
+  localStorage.codeWraps = false
+  localStorage.trimClips = true
+  localStorage.noWhitespace = true
+  localStorage.showsOnLaunch = true
 }
 if (localStorage.showsOnLaunch === 'true') {
   windowShowing = true

@@ -82,6 +82,7 @@ function start() {
   pinnedClips.forEach(function(pinnedClip) {
     var clip = new Clip(pinnedClip.text, pinnedClip.date, true)
     clip.language = pinnedClip.language
+    clip.title = pinnedClip.title
     clip.regenerateListItem()
     clip.rehighlight()
     clips.push(clip)
@@ -119,6 +120,7 @@ function windowClosed() {
     if (clip.pinned === true) {
       pinnedClips.push({
         text: clip.text,
+        title: clip.title,
         date: clip.momentCreated.format(),
         language: clip.language
       })
@@ -291,12 +293,13 @@ function displaySettingsError(e, noPre) {
 }
 
 function showOSL() {
+  if (oslWindow) return oslWindow.focus()
   oslWindow = gui.Window.open('osl.html', {
     title: 'Open Source Licenses',
     toolbar: false,
     position: 'center',
-    width: 580,
-    height: 460,
+    width: 700,
+    height: 600,
     resizable: true
   })
 }

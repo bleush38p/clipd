@@ -1,5 +1,7 @@
 (function(root) {
 
+  var gist = require('./js/gist')
+
   // htmlcollection.forEach *fill
   HTMLCollection.prototype.forEach = Array.prototype.forEach
 
@@ -87,6 +89,21 @@
         _this.liNode.children[1].remove()
         _this.liNode.children[1].remove()
       }
+    }
+    this.gistWaiting = false
+    this.sendToGist = function() {
+      if (_this.gistWaiting) return
+      _this.gistWaiting = true
+      document.querySelector('#toGist').innerHTML = 'sharing&hellip;'
+      var file = {}
+      file[_this.title + (EXTENSIONS[_this.language] ? ('.' + EXTENSIONS[_this.language]) : '')] =
+        {content: _this.text}
+      gist.create('Created by clipd: git.io/clipd', false, file, function(res) {
+        clipboard.set(JSON.parse(res).html_url)
+        global.didCopy('Gist URL copied to clipboard')
+        _this.gistWaiting = false
+        document.querySelector('#toGist').innerHTML = 'share as gist'
+      })
     }
 
     this.generateA()
@@ -239,6 +256,15 @@
     })
     $description.appendChild($switcher)
     $targetArea.appendChild($description)
+
+    // share
+    $share = document.createElement('div')
+    $share.classList.add('share')
+    $share.innerHTML = '<button id="toGist" class="switcher">share as gist</button> ' +
+                       '• <button id="toClipboard" class="switcher">copy to clipboard</button>'
+    $targetArea.appendChild($share)
+    $targetArea.querySelector('#toClipboard').addEventListener('click', _this.copyToClipboard)
+    $targetArea.querySelector('#toGist').addEventListener('click', _this.sendToGist)
 
     // code
     var $pre = document.createElement('pre')
