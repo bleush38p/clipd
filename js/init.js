@@ -106,24 +106,33 @@ function openWelcomeWindow() {
 function closeWelcomeWindow() {
   if (welcomeWindow) {
     welcomeWindow.close(true)
-    localStorage.firstRun = 'complete'
-    localStorage.backgroundDelay = 15
-    localStorage.foregroundDelay = 2
-    localStorage.alwaysOpaque = false
-    localStorage.hoverEffect = true
-    localStorage.languages = JSON.stringify(['apache', 'bash', 'coffeescript', 'cpp', 'cs', 'css', 'diff', 'http', 'ini', 'java', 'javascript', 'json', 'makefile', 'markdown', 'nginx', 'obj-c', 'perl', 'php', 'python', 'ruby', 'sql', 'xml'])
-    localStorage.requiredRelevance = 8
-    localStorage.trimClips = true
-    localStorage.noWhitespace = true
     welcomeWindow = null
+    if (start) start()
   }
 }
-
-windowShowing = false /*
-/*/ win.hide /*/
-windowShowing = true
-win.show()
-win.focus() /**/
+function setDefaults() {
+  localStorage.firstRun = 'complete'
+  localStorage.backgroundDelay = 15 // x
+  localStorage.foregroundDelay = 2 // x
+  localStorage.alwaysOpaque = false // x
+  localStorage.hoverEffect = true // x
+  localStorage.languages = JSON.stringify(['text', 'apache', 'bash', 'coffeescript', 'cpp', 'cs', 'css', 'diff', 'http', 'ini', 'java', 'javascript', 'json', 'makefile', 'markdown', 'nginx', 'objectivec', 'perl', 'php', 'python', 'ruby', 'sql', 'xml'])
+  localStorage.requiredRelevance = 8
+  localStorage.codeHighlight = 'monokai_sublime'
+  localStorage.codeBackground = 'dark'
+  localStorage.codeWraps = true
+  localStorage.trimClips = true // x
+  localStorage.noWhitespace = true // x
+  localStorage.showsOnLaunch = true // x
+}
+if (localStorage.showsOnLaunch === 'true') {
+  windowShowing = true
+  win.show()
+  win.focus()
+} else {
+  windowShowing = false
+  win.hide()
+}
 
 if (!localStorage.firstRun) {
   openWelcomeWindow()

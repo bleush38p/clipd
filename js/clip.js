@@ -66,7 +66,7 @@
     }
     this.copyToClipboard = function() {
       this.blur()
-      if (listener) listener.lastClip = _this.text
+      listener.lastClip.push(_this.text)
       clipboard.set(_this.text)
       global.didCopy()
     }
@@ -115,12 +115,16 @@
   }
 
   Clip.prototype.generateA = function() {
+    var _this = this
     var $aNode = document.createElement('a')
     $aNode.setAttribute('href', '#')
     if (this.pinned) {
       $aNode.classList.add('pinned')
     }
-    $aNode.addEventListener('click', this.displayResult)
+    $aNode.addEventListener('click', function() {
+      // proxy this into displayResult
+      _this.displayResult.call(_this)
+    })
 
     this.aNode = $aNode
   }
@@ -135,10 +139,10 @@
     $description.classList.add('description')
     $description.innerHTML = this.getElapsedTime() + ' &bull; ' +
       '<button class="switcher" onclick="nextMode()">' +
-        '<span data-mode="chars">' + this.stats.chars + ' chars</span>' +
-        '<span data-mode="bytes">' + this.stats.bytes + ' bytes</span>' +
-        '<span data-mode="words">' + this.stats.words + ' words</span>' +
-        '<span data-mode="lines">' + this.stats.lines + ' lines</span>' +
+        '<span data-mode="chars">' + this.stats.chars + ' char' + (this.stats.chars.length === 1 ? '' : 's') + '</span>' +
+        '<span data-mode="bytes">' + this.stats.bytes + ' byte' + (this.stats.bytes.length === 1 ? '' : 's') + '</span>' +
+        '<span data-mode="words">' + this.stats.words + ' word' + (this.stats.words.length === 1 ? '' : 's') + '</span>' +
+        '<span data-mode="lines">' + this.stats.lines + ' line' + (this.stats.lines.length === 1 ? '' : 's') + '</span>' +
       '</button>' + ' &bull; ' + this.language
 
     // TITLE
@@ -181,6 +185,67 @@
 
   Clip.prototype.displayResult = function() {
 
+    var _this = this
+    var $targetArea = document.querySelector('.details')
+    $targetArea.innerHTML = ''
+
+    // TITLE
+    var $title = document.createElement('h2')
+    $title.contentEditable = true
+    $title.innerText = this.title
+    $title.addEventListener('blur', function() {
+      this.scrollLeft = 0
+    })
+    $title.addEventListener('input', function() {
+      this.innerText = this.innerText.replace('\n', ' ')
+      _this.title = this.innerText
+      _this.regenerateListItem()
+    })
+    $targetArea.appendChild($title)
+
+    // DESCRIPTION
+    var $description = document.createElement('div')
+    $description.classList.add('description')
+    $description.innerHTML = this.getTime() + ' &bull; ' +
+      '<button class="switcher" onclick="nextMode()">' +
+        '<span data-mode="chars">' + this.stats.chars + ' char' + (this.stats.chars.length === 1 ? '' : 's') + '</span>' +
+        '<span data-mode="bytes">' + this.stats.bytes + ' byte' + (this.stats.bytes.length === 1 ? '' : 's') + '</span>' +
+        '<span data-mode="words">' + this.stats.words + ' word' + (this.stats.words.length === 1 ? '' : 's') + '</span>' +
+        '<span data-mode="lines">' + this.stats.lines + ' line' + (this.stats.lines.length === 1 ? '' : 's') + '</span>' +
+      '</button> &bull; '
+    var $switcher = document.createElement('select')
+    $switcher.classList.add('switcher')
+    var $altLangsGroup = document.createElement('optgroup')
+    $altLangsGroup.label = 'All languages'
+    var selectedLanguages = JSON.parse(localStorage.languages)
+    LANGUAGES.forEach(function(language) {
+      var $lang = document.createElement('option')
+      $lang.innerText = language
+      if (language === _this.language) {
+        $lang.setAttribute('selected', true)
+      }
+      if (~selectedLanguages.indexOf(language)) {
+        $switcher.appendChild($lang)
+      } else {
+        $altLangsGroup.appendChild($lang)
+      }
+    })
+    $switcher.appendChild($altLangsGroup)
+    $switcher.addEventListener('change', function(event) {
+      _this.language = this.value
+      _this.rehighlight()
+      _this.displayResult()
+      _this.regenerateListItem()
+    })
+    $description.appendChild($switcher)
+    $targetArea.appendChild($description)
+
+    // code
+    var $pre = document.createElement('pre')
+    var $code = document.createElement('code')
+    $code.innerHTML = this.highlightedHTML
+    $pre.appendChild($code)
+    $targetArea.appendChild($pre)
   }
 
   root.Clip = Clip

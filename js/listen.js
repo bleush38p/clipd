@@ -14,8 +14,8 @@
       }
       if (currentClipboard &&
           (localStorage.noWhite === 'false' || currentClipboard.trim()) &&
-          currentClipboard !== listener.lastClip) {
-        listener.lastClip = currentClipboard
+          !~listener.lastClip.indexOf(currentClipboard)) {
+        listener.lastClip = [currentClipboard]
         emitter.emit('clip', currentClipboard)
       }
 
@@ -25,7 +25,7 @@
       clearTimeout(listener.lastTimeout)
     },
     lastTimeout: 0,
-    lastClip: '',
+    lastClip: [],
     emitter: emitter
   }
 

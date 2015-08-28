@@ -178,16 +178,21 @@ body:hover .content, body.noHoverEffect .content {
 body.opaque .content {
   opacity: 1;
 }
-.listarea {
+.content > div {
   position: absolute;
   width: calc(50% - 2em);
   height: calc(100% - 2em);
   top: 1em;
-  left: 0;
-  border-right: 1px solid rgba(255, 255, 255, .23);
   padding: 0 1em;
 }
-.opaque .listarea {
+.listarea {
+  left: 0;
+  border-right: 1px solid rgba(255, 255, 255, .23);
+}
+.details {
+  right: 0;
+}
+.opaque .content > div {
   height: calc(100% - 1.25em);
   top: 0.25em;
 }
@@ -246,6 +251,7 @@ body.opaque .content {
   text-decoration: underline;
   transition: box-shadow 0.25s ease;
   cursor: pointer;
+  -webkit-appearance: none;
 }
 .switcher:hover, .switcher:focus {
   box-shadow: 0 0 2px rgba(0,0,0,1);
@@ -334,6 +340,43 @@ li .controls button[data-icon]:hover, li .controls button[data-icon]:focus {
   outline: none;
 }
 
+/* DETAILS */
+.details h2 {
+  margin: -4px -4px 0.25em;
+  cursor: text;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  border-radius: 3px;
+  transition: 0.25s ease;
+  padding: 4px;
+}
+.details h2:focus {
+  background: #4C4C4C;
+  box-shadow: 0 2px 3px -2px rgba(0,0,0,0.5);
+  overflow: auto;
+  text-overflow: clip;
+  outline: none;
+}
+.details .description {
+  white-space: nowrap;
+}
+.details pre {
+  border-radius: 4px;
+  border: 1px solid transparent;
+  background: rgba(0,0,0,0.05);
+  box-shadow: 0 0 16px -3px rgba(0,0,0,0.2) inset;
+  max-height: calc(100% - 4.92em);
+  padding: 4px;
+  box-sizing: border-box;
+  overflow: auto;
+  margin: 0.5em 0;
+  white-space: pre;
+}
+.code-wrap .details pre {
+  white-space: pre-wrap;
+}
+
 /* SETTINGS */
 .settingsPanel {
   position: absolute;
@@ -345,7 +388,112 @@ li .controls button[data-icon]:hover, li .controls button[data-icon]:focus {
   color: white;
   transform: translateY(-100%);
   transition: 0.5s transform ease;
+  box-sizing: border-box;
+  padding: 0.5em calc(50% - 200px);
+  overflow: auto;
+  -webkit-user-select: none;
+  font-size: 0.9em;
 }
 .settings .settingsPanel {
   transform: none;
+}
+.settingsPanel label {
+  display: block;
+  margin-bottom: 0.5em;
+  box-sizing: border-box;
+  padding: 4px;
+}
+.settingsPanel input[type="checkbox"] {
+  -webkit-appearance: none;
+  display: inline-block;
+  font-size: 1em;
+  width: 1em;
+  height: 1em;
+  margin: 6px;
+  border: none;
+  box-sizing: border-box;
+  border-radius: 2px;
+  background-color: #BBBBBB;
+  padding: 0;
+  float: right;
+}
+.settingsPanel input:focus, .settingsPanel select:focus {
+  outline: none;
+  box-shadow: 0 0 2px 1px #0277BD;
+}
+.settingsPanel input[type="checkbox"]:checked {
+  border: 3px solid #BBBBBB;
+  background-color: #0277BD;
+}
+.settingsPanel input[type="number"], .settingsPanel input[type="text"], .settingsPanel select {
+  -webkit-appearance: none;
+  display: inline-block;
+  font-size: 1em;
+  height: 1.5em;
+  font-family: 'Open Sans';
+  margin: 3px;
+  border: none;
+  box-sizing: border-box;
+  border-radius: 2px;
+  background-color: #BBBBBB;
+  padding-left: 3px;
+  float: right;
+}
+.settingsPanel input[type="number"] {
+  width: 3em;
+}
+.settingsPanel input[type="text"], {
+  width: 15em;
+}
+.settingsPanel select {
+  width: 10em;
+}
+.settingsPanel .help {
+  font-size: 0.8em;
+  padding: 3px;
+  margin-bottom: 0.625em;
+  font-weight: 300;
+}
+.settingsPanel hr {
+  border-style: solid;
+  border-top-width: 0;
+  opacity: 0.5;
+}
+hr[data-label] {
+  margin: 1.5em 0;
+  position: relative;
+  font-size: 0.8em;
+}
+hr[data-label]:before {
+  content: attr(data-label);
+  position: absolute;
+  top: -.75em;
+  left: 2px;
+  text-shadow:  1px  1px 0 #3F3F3F,
+               -1px  1px 0 #3F3F3F,
+               -1px -1px 0 #3F3F3F,
+                1px -1px 0 #3F3F3F,
+                0px  2px 0 #3F3F3F,
+               -2px  0px 0 #3F3F3F,
+                0px -2px 0 #3F3F3F,
+                2px  0px 0 #3F3F3F;
+}
+.settingsPanel button {
+  display: block;
+  background-color: #0277BD;
+  font-family: 'Open Sans';
+  color: white;
+  font-size: 1em;
+  width: 100%;
+  border-radius: 2px;
+  border: 2px solid #0277BD;
+  margin-bottom: 0.5em;
+}
+.settingsPanel button.danger {
+  background-color: #B71C1C;
+  border: 2px solid #B71C1C;
+}
+.settingsPanel button:focus {
+  outline: none;
+  border: 2px solid white;
 }

@@ -3,12 +3,14 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/webfonts/webfonts.css">
+  <link rel="stylesheet" href="node_modules/highlight.js/styles/monokai_sublime.css">
   <link rel="stylesheet" href="css/index.css">
-  <script src="js/clip.js"></script>
+  <script src="js/langs.js"></script>
   <script src="js/listen.js"></script>
+  <script src="js/clip.js"></script>
   <script src="js/init.js"></script>
 </head>
-<body class="opaque">
+<body>
   <div class="title">
     <div class="button left" id="closeButton">
       <i class="material-icons">close</i>
@@ -26,9 +28,71 @@
       </div>
     </ul>
     </div>
+    <div class="details"></div>
   </div>
   <div class="settingsPanel">
+    <hr data-label="behavior">
 
+    <input type="checkbox" id="showsOnLaunch">
+    <label for="showsOnLaunch">Show window at launch</label>
+
+    <button onclick="launchAtLogins()">Launch clipd at login&hellip;</button>
+
+    <hr data-label="appearance">
+
+    <input type="checkbox" id="opaque">
+    <label for="opaque">Disable window transparency</label>
+
+    <input type="checkbox" id="disableHover">
+    <label for="disableHover">Disable hover effect</label>
+
+    <hr data-label="new clips">
+
+    <input type="checkbox" id="trimClips">
+    <label for="trimClips">Trim whitespace from clips</label>
+
+    <input type="checkbox" id="noWhitespace">
+    <label for="noWhitespace">Ignore whitespace-only clips</label>
+
+    <hr data-label="language detection">
+
+    <div class="help">Clipd attempts to automatically determine the language of clips using highlight.js. Primary languages should contain a comma-separated list of languages to test for. When a language is tested, a relevance is given which quantifies how well the clip fits that language. If no language meets the required relevance, the clip will be considered plaintext. To disable language detection, set the required relevance to -1.</div>
+
+    <input type="text" id="primaryLanguages">
+    <label for="primaryLanguages">Primary languages</label>
+
+    <input type="number" min="-1" max="255" id="requiredRelevance">
+    <label for="requiredRelevance">Required relevance</label>
+
+    <hr data-label="syntax highlighting">
+
+    <select id="codeHighlight"></select>
+    <label for="codeHighlight">Color scheme</label>
+
+    <input type="checkbox" id="codeDark">
+    <label for="codeDark">Use dark theme</label>
+
+    <input type="checkbox" id="codeWraps">
+    <label for="codeWraps">Word wrap long lines</label>
+
+    <hr data-label="clipboard updates">
+
+    <div class="help">Clipd works by checking the clipboard every so often for changes. These values determine the delay in seconds between checks, for when the clipd window is showing, and when it is hidden.</div>
+
+    <input type="number" min="1" max="360" id="foregroundDelay">
+    <label for="foregroundDelay">Update delay when clipd window showing</label>
+
+    <input type="number" min="1" max="360" id="backgroundDelay">
+    <label for="backgroundDelay">Update delay when clipd window hidden</label>
+
+    <hr data-label="danger zone">
+
+    <button id="clearDefaults" class="danger">Reset all settings to defaults&hellip;</button>
+    <button id="clearAll" class="danger">Clear all data and quit&hellip;</button>
+
+    <hr data-label="info">
+
+    <button id="showLicenses">Open source licenses&hellip;</button>
   </div>
   <script src="js/index.js"></script>
 </body>

@@ -10,6 +10,7 @@ var $closeButton = document.getElementById('closeButton')
 $closeButton.addEventListener('mousedown', function(e) {
   $closeButton.classList.add('down')
   $closeButton.setAttribute('data-timeout', setTimeout(function(){
+    win.close()
     win.close(true)
     closeWelcomeWindow()
   }, 1000))
@@ -41,10 +42,6 @@ $settingsButton.addEventListener('click', function() {
     document.body.classList.add('settings')
 })
 win.on('close', closeAndSaveSettings)
-function closeAndSaveSettings() {
-  // saving and stuff, etc.
-  document.body.classList.remove('settings')
-}
 
 function nextMode() {
   var $content = document.querySelector('.content')
@@ -69,18 +66,17 @@ if (localStorage.firstRun) {
 }
 
 function start() {
-  console.log('start!')
-  var pinnedClips = JSON.parse(localStorage.pinnedClips) || []
-  console.log(localStorage.pinnedClips)
-  console.log(pinnedClips)
+  updateWindowDisplay()
+
+  var pinnedClips = JSON.parse(localStorage.pinnedClips || '[]')
   pinnedClips.forEach(function(pinnedClip) {
     var clip = new Clip(pinnedClip.text, pinnedClip.date, true)
     clip.language = pinnedClip.language
     clip.regenerateListItem()
     clip.rehighlight()
     clips.push(clip)
+    listener.lastClip.push(pinnedClip.text)
   })
-  console.log(clips)
 
   clips.forEach(function(clip) {
     document.querySelector('ul').insertBefore(clip.aNode, document.querySelector('ul').children[0])
@@ -91,7 +87,12 @@ function start() {
     document.querySelector('ul').insertBefore(clip.aNode, document.querySelector('ul').children[0])
     clips.push(clip)
   })
-  listener.listen(Number(localStorage.backgroundDelay))
+
+  if (localStorage.showsOnLaunch === 'true') {
+    listener.listen(Number(localStorage.foregroundDelay))
+  } else {
+    listener.listen(Number(localStorage.backgroundDelay))
+  }
 }
 
 win.on('close', windowClosed)
@@ -116,6 +117,7 @@ function windowClosed() {
   clips.forEach(function(clip) {
     document.querySelector('ul').insertBefore(clip.aNode, document.querySelector('ul').children[0])
   })
+
   listener.listen(Number(localStorage.backgroundDelay))
 }
 win.on('focus', windowUpdate)
@@ -125,3 +127,48 @@ function windowUpdate() {
   })
   listener.listen(Number(localStorage.foregroundDelay))
 }
+
+function updateWindowDisplay() {
+  document.body.classList.remove('opaque', 'noHoverEffect')
+  if (localStorage.alwaysOpaque === 'true') {
+    document.body.classList.add('opaque')
+    document.getElementById('opaque').checked = true
+  } else {
+    document.getElementById('opaque').checked = false
+  }
+  if (localStorage.hoverEffect === 'false') {
+    document.body.classList.add('noHoverEffect')
+    document.getElementById('disableHover').checked = true
+  } else {
+    document.getElementById('disableHover').checked = false
+  }
+  if (localStorage.codeWraps === 'true') {
+    document.body.classList.add('code-wrap')
+  }
+  document.getElementById('showsOnLaunch').checked = (localStorage.showsOnLaunch === 'true')
+  document.getElementById('trimClips').checked = (localStorage.trimClips === 'true')
+  document.getElementById('noWhitespace').checked = (localStorage.noWhitespace === 'true')
+  document.getElementById('foregroundDelay').value = localStorage.foregroundDelay
+  document.getElementById('backgroundDelay').value = localStorage.backgroundDelay
+
+}
+
+// SETTINGS
+
+function closeAndSaveSettings() {
+  localStorage.showsOnLaunch = document.getElementById('showsOnLaunch').checked
+  localStorage.alwaysOpaque = document.getElementById('opaque').checked
+  localStorage.hoverEffect = !document.getElementById('disableHover').checked
+  localStorage.trimClips = document.getElementById('trimClips').checked
+  localStorage.noWhitespace = document.getElementById('noWhitespace').checked
+  localStorage.foregroundDelay = document.getElementById('foregroundDelay').value
+  localStorage.backgroundDelay = document.getElementById('backgroundDelay').value
+  // saving and stuff, etc.
+  updateWindowDisplay()
+  document.body.classList.remove('settings')
+}
+
+document.getElementById('clearAll').addEventListener('click', function() {
+  win.close(true)
+  localStorage.clear()
+})
