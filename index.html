@@ -36,7 +36,7 @@
     <input type="checkbox" id="showsOnLaunch">
     <label for="showsOnLaunch">Show window at launch</label>
 
-    <button onclick="launchAtLogins()">Launch clipd at login&hellip;</button>
+    <button id="launchAtLogin">Launch clipd at login&hellip;</button>
 
     <hr data-label="appearance">
 
@@ -95,6 +95,12 @@
     <hr data-label="info">
 
     <button id="showLicenses" onclick="showOSL()">Open source licenses&hellip;</button>
+    <button id="github" onclick="gui.Shell.openExternal('https://github.com/bleush38p/clipd')">Show clipd on Github</button>
+    <button id="feedback" onclick="gui.Shell.openExternal('https://github.com/bleush38p/clipd/issues')">Feedback</button>
+
+    <div id="launchAtLoginOverlay">
+      <p>To launch clipd at login, right click clipd on the<br>Dock and select Options &rarr; Open at Login.<br><br>(click to close)</p>
+    </div>
   </div>
   <script src="js/index.js"></script>
 </body>

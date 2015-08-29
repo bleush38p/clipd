@@ -255,10 +255,24 @@ function closeAndSaveSettings() {
   if (e.length === 0) {
     // saving and stuff, etc.
     updateWindowDisplay()
-    document.body.classList.remove('settings')
+    document.body.classList.remove('settings', 'launch-at-login')
+    win.setShowInTaskbar(false)
   } else {
     displaySettingsError(e)
   }
+}
+function displaySettingsError(e, noPre) {
+  $error = document.createElement('div')
+  $error.classList.add('error')
+  $error.innerHTML = (noPre ? '' : ('The following error' + (e.length > 1 ? 's' : '') +
+                     ' occured:<br>')) + e.join('<br>')
+  document.querySelector('.settingsPanel').insertBefore(
+    $error,
+    document.querySelector('.settingsPanel').children[0]
+  )
+  $errorClone = $error.cloneNode(true)
+  $errorClone.classList.add('spacer')
+  document.querySelector('.settingsPanel').insertBefore($errorClone, $error)
 }
 document.getElementById('clearDefaults').addEventListener('click', function() {
   if (this.innerText.indexOf('R') === 0) {
@@ -278,19 +292,15 @@ document.getElementById('clearAll').addEventListener('click', function() {
     localStorage.clear()
   }
 })
-function displaySettingsError(e, noPre) {
-  $error = document.createElement('div')
-  $error.classList.add('error')
-  $error.innerHTML = (noPre ? '' : ('The following error' + (e.length > 1 ? 's' : '') +
-                     ' occured:<br>')) + e.join('<br>')
-  document.querySelector('.settingsPanel').insertBefore(
-    $error,
-    document.querySelector('.settingsPanel').children[0]
-  )
-  $errorClone = $error.cloneNode(true)
-  $errorClone.classList.add('spacer')
-  document.querySelector('.settingsPanel').insertBefore($errorClone, $error)
-}
+document.getElementById('launchAtLogin').addEventListener('click', function() {
+  document.body.classList.add('launch-at-login')
+  win.setShowInTaskbar(true)
+})
+document.getElementById('launchAtLoginOverlay').addEventListener('click', function() {
+  document.body.classList.remove('launch-at-login')
+  win.setShowInTaskbar(false)
+})
+
 
 function showOSL() {
   if (oslWindow) return oslWindow.focus()

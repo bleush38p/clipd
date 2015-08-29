@@ -237,6 +237,8 @@ body.opaque .content {
 .description {
   font-size: 0.6em;
   opacity: 0.7;
+  font-style: italic;
+  text-transform: uppercase;
 }
 .description .switcher {
   font-style: italic;
@@ -529,4 +531,25 @@ hr[data-label]:before {
 .settingsPanel .error.spacer {
   position: static;
   opacity: 0;
+}
+
+#launchAtLoginOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0,0,0,0.8);
+  display: none;
+}
+.launch-at-login #launchAtLoginOverlay {
+  display: block;
+  opacity: 1;
+}
+#launchAtLoginOverlay p {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
