@@ -303,7 +303,10 @@ document.getElementById('launchAtLoginOverlay').addEventListener('click', functi
 
 
 function showOSL() {
-  if (oslWindow) return oslWindow.focus()
+  if (oslWindow) {
+    oslWindow.show()
+    oslWindow.focus()
+  }
   oslWindow = gui.Window.open('osl.html', {
     title: 'Open Source Licenses',
     toolbar: false,
@@ -311,5 +314,9 @@ function showOSL() {
     width: 700,
     height: 600,
     resizable: true
+  })
+  oslWindow.on('close', function() {
+    oslWindow.close(true)
+    oslWindow = null
   })
 }
